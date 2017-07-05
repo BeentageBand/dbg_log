@@ -12,12 +12,11 @@
 /*=====================================================================================*
  * Project Includes
  *=====================================================================================*/
-#include "hama_dbg_trace.h"
-/*=====================================================================================* 
- * Standard Includes
+#include "dbg_log.h"
+/*=====================================================================================*
+ * Std Includes
  *=====================================================================================*/
-#include <pthread.h>
-#include <cstring>
+#include <stdarg.h>
 /*=====================================================================================* 
  * Local X-Macros
  *=====================================================================================*/
@@ -25,20 +24,24 @@
 /*=====================================================================================* 
  * Local Define Macros
  *=====================================================================================*/
-
+#define FID_Dbg_Struct(fid, default_lvl, desc) {fid, default_lvl, 0xFFU},
 /*=====================================================================================* 
  * Local Type Definitions
  *=====================================================================================*/
-
+typedef struct Dbg_Info
+{
+   Dbg_Feat_Id_T fid;
+   Dbg_Verbose_Lvl_T lvl;
+   uint8_t file_id;
+}Dbg_Info_T;
 /*=====================================================================================* 
  * Local Object Definitions
  *=====================================================================================*/
-//static pthread_attr_t Attr = {0};
-//static pid_t Process = 0;
-//static pthread_t Thread = {0};
-static bool Alive = false;
-//static pthread_mutex_t Stream_Mutex = {0};
-//static pthread_mutexattr_t Mutex_Attr = {0};
+static Dbg_Info_T Dbg_Info[] =
+{
+   DBG_FID_LIST(FID_Dbg_Struct)
+};
+
 /*=====================================================================================* 
  * Exported Object Definitions
  *=====================================================================================*/
@@ -46,7 +49,7 @@ static bool Alive = false;
 /*=====================================================================================* 
  * Local Function Prototypes
  *=====================================================================================*/
-//static void * Main(void * args);
+
 /*=====================================================================================* 
  * Local Inline-Function Like Macros
  *=====================================================================================*/
@@ -54,45 +57,32 @@ static bool Alive = false;
 /*=====================================================================================* 
  * Local Function Definitions
  *=====================================================================================*/
-//void * Main(void * args)
-//{
-//   while(Alive)
-//   {
-//      if( 0 == pthread_mutex_lock(&Stream_Mutex) )
-//      {
-//         std::cout << "" << std::endl;//purge cout
-//      }
-//      pthread_mutex_unlock(&Stream_Mutex);
-//   }
-//
-//   pthread_mutex_destroy(&Stream_Mutex);
-//   pthread_attr_destroy(&Attr);
-//   return 0;
-//}
+int Dbg_Info_LT(void const * a, void const * b)
+{
+   Dbg_Feat_Id_T const * fa = (Dbg_Feat_Id_T const *)a;
+   Dbg_Feat_Id_T const * fb = (Dbg_Feat_Id_T const *)b;
+   return (*fa - *fb);
+}
 /*=====================================================================================* 
  * Exported Function Definitions
  *=====================================================================================*/
-void dbg::Init(void)
+void Dbg_Log_Config(Dbg_Feat_Id_T const fid, uint8_t const file_id)
 {
-   Alive = true;
-   //pthread_mutexattr_init(&Mutex_Attr);
-   //pthread_mutex_init(&Stream_Mutex, &Mutex_Attr);
-   //
-   //pthread_attr_init(&Attr);
-   //Process = pthread_create(&Thread, &Attr, Main, 0);
+   Dbg_Info_T * const found_dbg_info = bsearch(&fid, Dbg_Info, Num_Elems(Dbg_Info),
+         sizeof(*Dbg_Info), Dbg_Info_LT);
+   Isnt_Nullptr(found_dbg_info, );
+   found_dbg_info->file_id = file_id;
 }
 
-//bool dbg::Get_Stream(void)
-//{
-//  return 0;//== pthread_mutex_lock(&Stream_Mutex);
-//}
-
-//void dbg::Release_Stream(void)
-//{
-//}
-void dbg::Shut(void)
+void Dbg_Log(Dbg_Feat_Id_T const fid, Dbg_Verbose_Lvl_T const info, char const * filename, int const line,
+      char const * fmt, ...)
 {
-   Alive = false;
+   va_list args;
+   va_start(args, fmt);
+   printf("%d : %s:%d - ", fid, filename, line);
+   vprintf(fmt, args);
+   printf("\n");
+   va_end(args);
 }
 /*=====================================================================================* 
  * hama_dbg_trace.cpp

@@ -24,24 +24,32 @@
 /*=====================================================================================* 
  * Local Define Macros
  *=====================================================================================*/
-#define FID_Dbg_Struct(fid, default_lvl, desc) {fid, default_lvl, 0xFFU},
+#define FID_Dbg_Struct(fid, default_lvl, desc) {default_lvl, 0xFFU},
 /*=====================================================================================* 
  * Local Type Definitions
  *=====================================================================================*/
 typedef struct Dbg_Info
 {
-   Dbg_Feat_Id_T fid;
    Dbg_Verbose_Lvl_T lvl;
    uint8_t file_id;
 }Dbg_Info_T;
 /*=====================================================================================* 
  * Local Object Definitions
  *=====================================================================================*/
+#if 0
 static Dbg_Info_T Dbg_Info[] =
 {
    DBG_FID_LIST(FID_Dbg_Struct)
 };
+#endif
 
+static char const * const Dbg_Lvl_Name [] =
+{
+   "DBG_VERBOSE",
+   "DBG_INFO",
+   "DBG_WARN",
+   "DBG_FAULT"
+};
 /*=====================================================================================* 
  * Exported Object Definitions
  *=====================================================================================*/
@@ -57,29 +65,16 @@ static Dbg_Info_T Dbg_Info[] =
 /*=====================================================================================* 
  * Local Function Definitions
  *=====================================================================================*/
-int Dbg_Info_LT(void const * a, void const * b)
-{
-   Dbg_Feat_Id_T const * fa = (Dbg_Feat_Id_T const *)a;
-   Dbg_Feat_Id_T const * fb = (Dbg_Feat_Id_T const *)b;
-   return (*fa - *fb);
-}
+
 /*=====================================================================================* 
  * Exported Function Definitions
  *=====================================================================================*/
-void Dbg_Log_Config(Dbg_Feat_Id_T const fid, uint8_t const file_id)
-{
-   Dbg_Info_T * const found_dbg_info = bsearch(&fid, Dbg_Info, Num_Elems(Dbg_Info),
-         sizeof(*Dbg_Info), Dbg_Info_LT);
-   Isnt_Nullptr(found_dbg_info, );
-   found_dbg_info->file_id = file_id;
-}
-
-void Dbg_Log(Dbg_Feat_Id_T const fid, Dbg_Verbose_Lvl_T const info, char const * filename, int const line,
-      char const * fmt, ...)
+void Dbg_Log_Print(Dbg_Feat_Id_T const fid, uint8_t const instance, char const * file,
+      Dbg_Verbose_Lvl_T const info, int const line, char const * fmt, ...)
 {
    va_list args;
    va_start(args, fmt);
-   printf("%d : %s:%d - ", fid, filename, line);
+   printf("%d.%d: %s:%d:%s - ", fid, instance, file, line, Dbg_Lvl_Name[info]);
    vprintf(fmt, args);
    printf("\n");
    va_end(args);

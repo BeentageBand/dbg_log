@@ -1,6 +1,6 @@
 /*=====================================================================================*/
 /**
- * hama_dbg_trace.h
+ * dbg_log.h
  * author : puch
  * date : Oct 22 2015
  *
@@ -8,8 +8,8 @@
  *
  */
 /*=====================================================================================*/
-#ifndef HAMA_DBG_TRACE_H_
-#define HAMA_DBG_TRACE_H_
+#ifndef DBG_LOG_H_
+#define DBG_LOG_H_
 /*=====================================================================================*
  * Project Includes
  *=====================================================================================*/
@@ -39,28 +39,26 @@ extern "C" {
 /*=====================================================================================* 
  * Exported Function Prototypes
  *=====================================================================================*/
-extern void Dbg_Log_Config(Dbg_Feat_Id_T const fid, uint8_t const file_id);
-
-extern void Dbg_Log(Dbg_Feat_Id_T const fid, Dbg_Verbose_Lvl_T const info, char const * filename, int const line,
-      char const * fmt, ...);
+extern void Dbg_Log_Print(Dbg_Feat_Id_T const fid, uint8_t const instance, char const * file,
+      Dbg_Verbose_Lvl_T const info, int const line, char const * fmt, ...);
 /*=====================================================================================* 
  * Exported Function Like Macros
  *=====================================================================================*/
-#define Dbg_Log_Define_File(fid, file_id) \
-   static Dbg_Log_Info_T _concat(fid,_info) = {fid, file_id};
-#define Dbg_Info(fmt, args...) \
-   Dbg_Printf(&_concat(fid,_info), DBG_INFO, __FILE__, __LINE__, fmt, args)
+#define Dbg_FID_Def(fid, instance) fid, instance, __FILE__
 
-#define Dbg_Warn(fmt, args...) \
-   Dbg_Printf(&_concat(fid,_info), DBG_WARN, __FILE__, __LINE__, fmt, args)
+#define Dbg_Info(_args...) \
+		Dbg_Log_Print(Dbg_FID, DBG_INFO, __LINE__, _args)
+
+#define Dbg_Warn(args...) \
+		Dbg_Log_Print(Dbg_FID, DBG_WARN, __LINE__, _args)
 
 #ifdef __cplusplus
 }
 #endif
 /*=====================================================================================* 
- * hama_dbg_trace.
+ * dbg_log.h
  *=====================================================================================*
  * Log History
  *
  *=====================================================================================*/
-#endif /*HAMA_DBG_TRACE_H_*/
+#endif /*DBG_LOG_H_*/

@@ -49,7 +49,7 @@ extern void Dbg_Log_Print(Dbg_Feat_Id_T const fid, uint8_t const instance, char 
 #define Dbg_Info(_args...) \
 		Dbg_Log_Print(Dbg_FID, DBG_INFO, __LINE__, _args)
 
-#define Dbg_Warn(args...) \
+#define Dbg_Warn(_args...) \
 		Dbg_Log_Print(Dbg_FID, DBG_WARN, __LINE__, _args)
 
 #ifdef __cplusplus

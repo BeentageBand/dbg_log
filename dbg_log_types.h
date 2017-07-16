@@ -35,16 +35,16 @@ extern "C" {
  *=====================================================================================*/
 typedef enum
 {
-   DBG_VERBOSE,
-   DBG_INFO,
+   DBG_FAULT,
    DBG_WARN,
-   DBG_FAULT
+   DBG_INFO,
+   DBG_VERBOSE
 }Dbg_Verbose_Lvl_T;
 
 typedef enum
 {
    DBG_FID_LIST(FID_ITEM)
-   DBG_TOTAL_FID_ITESM
+   DBG_TOTAL_FID_ITEMS
 }Dbg_Feat_Id_T;
 /*=====================================================================================* 
  * Exported Object Declarations

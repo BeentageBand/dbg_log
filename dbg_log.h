@@ -35,7 +35,7 @@ extern "C" {
 /*=====================================================================================* 
  * Exported Object Declarations
  *=====================================================================================*/
-
+extern char const * Dbg_Log_Tid_Color[];
 /*=====================================================================================* 
  * Exported Function Prototypes
  *=====================================================================================*/
@@ -46,11 +46,17 @@ extern void Dbg_Log_Print(Dbg_Feat_Id_T const fid, uint8_t const instance, char 
  *=====================================================================================*/
 #define Dbg_FID_Def(fid, instance) fid, instance, __FILE__
 
+#define Dbg_Verbose(_args...) \
+		Dbg_Log_Print(Dbg_FID, DBG_VERBOSE, __LINE__, _args)
+
 #define Dbg_Info(_args...) \
 		Dbg_Log_Print(Dbg_FID, DBG_INFO, __LINE__, _args)
 
 #define Dbg_Warn(_args...) \
 		Dbg_Log_Print(Dbg_FID, DBG_WARN, __LINE__, _args)
+
+#define Dbg_Fault(_args...) \
+		Dbg_Log_Print(Dbg_FID, DBG_FAULT, __LINE__, _args)
 
 #ifdef __cplusplus
 }

@@ -13,7 +13,6 @@
  * Project Includes
  *=====================================================================================*/
 #include "dbg_log.h"
-#include "ipc.h"
 /*=====================================================================================*
  * Std Includes
  *=====================================================================================*/
@@ -21,15 +20,7 @@
 /*=====================================================================================* 
  * Local X-Macros
  *=====================================================================================*/
-#define FBLACK      "\033[30;"
-#define FRED        "\033[31;"
-#define FGREEN      "\033[32;"
-#define FYELLOW     "\033[33;"
-#define FBLUE       "\033[34;"
-#define FPURPLE     "\033[35;"
-#define D_FGREEN    "\033[6;"
-#define FWHITE      "\033[7;"
-#define FCYAN       "\x1b[36m"
+
 /*=====================================================================================* 
  * Local Define Macros
  *=====================================================================================*/
@@ -39,8 +30,8 @@
  *=====================================================================================*/
 typedef struct Dbg_Info
 {
-   Dbg_Verbose_Lvl_T lvl;
-   uint8_t file_id;
+	Dbg_Verbose_Lvl_T lvl;
+	uint8_t file_id;
 }Dbg_Info_T;
 /*=====================================================================================* 
  * Local Object Definitions
@@ -48,29 +39,21 @@ typedef struct Dbg_Info
 
 static Dbg_Info_T Dbg_Info[] =
 {
-   DBG_FID_LIST(FID_Dbg_Struct)
+		DBG_FID_LIST(FID_Dbg_Struct)
 };
 
 
 static char const * const Dbg_Lvl_Name [] =
 {
-   "DBG_FAULT",
-   "DBG_WARN",
-   "DBG_INFO",
-   "DBG_VERBOSE"
+		"DBG_FAULT",
+		"DBG_WARN",
+		"DBG_INFO",
+		"DBG_VERBOSE"
 };
 /*=====================================================================================* 
  * Exported Object Definitions
  *=====================================================================================*/
-char const * Dbg_Log_Tid_Color [] =
-{
-FBLACK,
-FRED,
-FGREEN,
-FYELLOW,
-FBLUE,
-FPURPLE,
-};                   
+
 /*=====================================================================================* 
  * Local Function Prototypes
  *=====================================================================================*/
@@ -87,20 +70,19 @@ FPURPLE,
  * Exported Function Definitions
  *=====================================================================================*/
 void Dbg_Log_Print(Dbg_Feat_Id_T const fid, uint8_t const instance, char const * file,
-      Dbg_Verbose_Lvl_T const info, int const line, char const * fmt, ...)
+		Dbg_Verbose_Lvl_T const info, int const line, char const * fmt, ...)
 {
-   if(fid >= DBG_TOTAL_FID_ITEMS) return;
+	if(fid >= DBG_TOTAL_FID_ITEMS) return;
 
-   if(info <= Dbg_Info[fid].lvl)
-   {
-      va_list args;
-      va_start(args, fmt);
-      printf("%s", Dbg_Log_Tid_Color[IPC_Self_Task_Id()]);
-      printf("%d.%d: %s:%d:%s - ", fid, instance, file, line, Dbg_Lvl_Name[info]);
-      vprintf(fmt, args);
-      printf("\n");
-      va_end(args);
-   }
+	if(info <= Dbg_Info[fid].lvl)
+	{
+		va_list args;
+		va_start(args, fmt);
+		printf("%d.%d: %s:%d:%s - ", fid, instance, file, line, Dbg_Lvl_Name[info]);
+		vprintf(fmt, args);
+		printf("\n");
+		va_end(args);
+	}
 }
 /*=====================================================================================* 
  * hama_dbg_trace.cpp

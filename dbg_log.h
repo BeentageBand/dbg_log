@@ -17,7 +17,7 @@
 /*=====================================================================================* 
  * Standard Includes
  *=====================================================================================*/
-
+#define DBG_IS_NULL(p) (p ? "not NULL" : "NULL")
 /*=====================================================================================* 
  * Exported X-Macros
  *=====================================================================================*/
@@ -39,12 +39,12 @@ extern char const * Dbg_Log_Tid_Color[];
 /*=====================================================================================* 
  * Exported Function Prototypes
  *=====================================================================================*/
-extern void Dbg_Log_Print(Dbg_Feat_Id_T const fid, uint8_t const instance, char const * file,
-      Dbg_Verbose_Lvl_T const info, int const line, char const * fmt, ...);
+extern void Dbg_Log(Dbg_FID_T const fid, uint8_t const instance, Dbg_Lvl_T const lvl, char const * filename, uint32_t const line, char const * fmt, ...);
+
 /*=====================================================================================* 
  * Exported Function Like Macros
  *=====================================================================================*/
-#define Dbg_FID_Def(fid, instance) fid, instance, __FILE__
+#define DBG_FID_DEF(fid, instance) fid, instance
 
 #define Dbg_Verbose(_args...) \
 		Dbg_Log_Print(Dbg_FID, DBG_VERBOSE, __LINE__, _args)

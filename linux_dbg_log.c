@@ -16,40 +16,27 @@
 /*=====================================================================================*
  * Std Includes
  *=====================================================================================*/
+#include <stdio.h>
 #include <stdarg.h>
 /*=====================================================================================* 
  * Local X-Macros
  *=====================================================================================*/
-
+#define DBG_FID_NAME(fid, desc) _str(fid),
 /*=====================================================================================* 
  * Local Define Macros
  *=====================================================================================*/
-#define FID_Dbg_Struct(fid, default_lvl, desc) {default_lvl, 0xFFU},
 /*====================================================================================*
  * Local Type Definitions
  *=====================================================================================*/
-typedef struct Dbg_Info
-{
-	Dbg_Verbose_Lvl_T lvl;
-	uint8_t file_id;
-}Dbg_Info_T;
 /*=====================================================================================* 
  * Local Object Definitions
  *=====================================================================================*/
-
-static Dbg_Info_T Dbg_Info[] =
+static char const * Dbg_Lvl_Str[] =
 {
-		DBG_FID_LIST(FID_Dbg_Struct)
+  DBG_FID_LIST(DBG_FID_NAME)
 };
 
 
-static char const * const Dbg_Lvl_Name [] =
-{
-		"DBG_FAULT",
-		"DBG_WARN",
-		"DBG_INFO",
-		"DBG_VERBOSE"
-};
 /*=====================================================================================* 
  * Exported Object Definitions
  *=====================================================================================*/
@@ -69,20 +56,16 @@ static char const * const Dbg_Lvl_Name [] =
 /*=====================================================================================* 
  * Exported Function Definitions
  *=====================================================================================*/
-void Dbg_Log_Print(Dbg_Feat_Id_T const fid, uint8_t const instance, char const * file,
-		Dbg_Verbose_Lvl_T const info, int const line, char const * fmt, ...)
+void Dbg_Log(Dbg_FID_T const fid, uint8_t const instance, Dbg_Lvl_T const lvl, char const * filename, uint32_t const line, char const * fmt, ...)
 {
-	if(fid >= DBG_TOTAL_FID_ITEMS) return;
 
-	if(info <= Dbg_Info[fid].lvl)
-	{
 		va_list args;
 		va_start(args, fmt);
-		printf("%d.%d: %s:%d:%s - ", fid, instance, file, line, Dbg_Lvl_Name[info]);
+   printf("%d:%d ",fid, instance);
+   printf("%s-%d:\"%s\"--", filename, line, Dbg_Lvl_Str[lvl]);
 		vprintf(fmt, args);
 		printf("\n");
 		va_end(args);
-	}
 }
 /*=====================================================================================* 
  * hama_dbg_trace.cpp

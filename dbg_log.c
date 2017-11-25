@@ -9,14 +9,16 @@ static uint8_t FID_Dbg_Lvl[] =
 {
 	DBG_FID_LIST(DBG_FID_NAME)
 };
-	
-void Dbg_Log(Dbg_Lvl_T const lvl, char const * fmt, ...)
+
+void Dbg_Log(Dbg_Lvl_T const lvl, char const * fmt, Dbg_FID_T const fid, ...)
 {
-	if(lvl <=DBG_FAULT_LVL && lvl >= FID_Dbg_Lvl[lvl])
+	if(lvl <=DBG_FAULT_LVL &&
+	   fid < DBG_TOTAL_FID_ITEMS &&
+	   lvl >= FID_Dbg_Lvl[fid] )
 	{
 		va_list args;
-		va_start(args, fmt);
-		Dbg_Stdout.vsprintf(fmt,args);
+		va_start(args, fid);
+		Dbg_Stdout.vsprintf(fmt, fid, args);
 		va_end(args);
 	}
 }

@@ -11,7 +11,7 @@
 
 static int linux_dbprintf(char const * fmt, uint8_t const fid, va_list va_args);
 
-struct Dbg_Log_Stdout Dbg_Stdout = {linux_dbprintf};
+struct Dbg_Log_Stdout const Dbg_Stdout = {linux_dbprintf};
 
 int linux_dbprintf(char const * fmt, uint8_t const fid, va_list va_args)
 {

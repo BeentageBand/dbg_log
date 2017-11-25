@@ -7,6 +7,6 @@
 extern struct Dbg_Log_Stdout
 {
 	int (*vsprintf)(char const *, uint8_t const, va_list);
-} Dbg_Stdout;
+} const Dbg_Stdout;
 
 #endif /*DBG_LOG_EXT_H_*/

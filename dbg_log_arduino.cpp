@@ -14,7 +14,7 @@
 
 static int arduino_vdbprintf(char const * fmt, va_list va_args);
 
-struct Dbg_Log_Stdout Dbg_Stdout = {arduino_vdbprintf};
+struct Dbg_Log_Stdout const Dbg_Stdout = {arduino_vdbprintf};
 
 int arduino_vdbprintf(char const * fmt, va_list va_args)
 {

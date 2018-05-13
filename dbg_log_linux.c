@@ -15,5 +15,5 @@ struct Dbg_Log_Stdout const Dbg_Stdout = {linux_dbprintf};
 
 int linux_dbprintf(char const * fmt, uint8_t const fid, va_list va_args)
 {
-	return printf("%d", fid) + vprintf(fmt, va_args) + printf("\n");
+   return printf("%d", fid) + vprintf(fmt, va_args) + printf("\n");
 }

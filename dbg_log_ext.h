@@ -10,7 +10,7 @@ extern "C" {
 
 extern struct Dbg_Log_Stdout
 {
-	int (*vsprintf)(char const *, uint8_t const, va_list);
+   int (*vsprintf)(char const *, uint8_t const, va_list);
 } const Dbg_Stdout;
 
 #ifdef __cplusplus

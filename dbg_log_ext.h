@@ -13,6 +13,9 @@ extern struct Dbg_Log_Stdout
    int (*vsprintf)(char const *, uint8_t const, va_list);
 } const Dbg_Stdout;
 
+extern bool Dbg_Log_Available(void);
+extern void Dbg_Log_Sync(void);
+
 #ifdef __cplusplus
 }
 #endif

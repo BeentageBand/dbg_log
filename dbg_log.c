@@ -19,7 +19,7 @@ void Dbg_Log(Dbg_Lvl_T const lvl, char const * fmt, Dbg_FID_T const fid, ...)
       if(!Dbg_Log_Available()) return ;
       va_list args;
       va_start(args, fid);
-      Dbg_Stdout.vsprintf(fmt, fid, args);
+      Dbg_Stdout.log(fmt, fid, args);
       va_end(args);
       Dbg_Log_Sync();
    }

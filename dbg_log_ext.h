@@ -10,7 +10,7 @@ extern "C" {
 
 extern struct Dbg_Log_Stdout
 {
-   int (*vsprintf)(char const *, uint8_t const, va_list);
+   int (*log)(char const *, uint8_t const, va_list);
 } const Dbg_Stdout;
 
 extern bool Dbg_Log_Available(void);
